@@ -1,12 +1,12 @@
 const projects = [
   {
     id: 1,
-    name: 'Recipe Explorer',
-    description: 'A recipe discovery app with ingredient search, categories, and live API data.',
+    name: 'Music-Player',
+    description: 'A sleek music player interface with playlist management and audio controls.',
     tech: ['React', 'REST API', 'Tailwind CSS'],
     category: 'API',
     status: 'Live',
-    liveLink: '#',
+    liveLink: 'Music-Player',
     githubLink: '#'
   },
   {
