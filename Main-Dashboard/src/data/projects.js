@@ -6,7 +6,7 @@ const projects = [
     tech: ['React', 'REST API', 'Tailwind CSS'],
     category: 'API',
     status: 'Live',
-    liveLink: 'Music-Player',
+    liveLink: '/music-player',
     githubLink: '#'
   },
   {
