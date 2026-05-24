@@ -49,7 +49,7 @@ const SongGrid = styled.div`
 `;
 
 export const SongList = () => {
-    const { queue, playTrack } = usePlayer();
+    const { queue, filteredQueue, playTrack } = usePlayer();
 
     return (
         <SongListContainer>
@@ -61,15 +61,18 @@ export const SongList = () => {
             </SectionTitle>
 
             <SongGrid>
-                {queue.map((track, index) => (
-                    <div
-                        key={track.id}
-                        onClick={() => playTrack(index)}
-                        style={{ cursor: "pointer" }}
-                    >
-                        <SongCard track={track} />
-                    </div>
-                ))}
+                {filteredQueue.map((track) => {
+                    const actualIndex = queue.findIndex((t) => t.id === track.id);
+                    return (
+                        <div
+                            key={track.id}
+                            onClick={() => playTrack(actualIndex)}
+                            style={{ cursor: "pointer" }}
+                        >
+                            <SongCard track={track} index={actualIndex} />
+                        </div>
+                    );
+                })}
             </SongGrid>
         </SongListContainer>
     );

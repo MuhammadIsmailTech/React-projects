@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
+import { usePlayer } from "../hooks/usePlayer";
 
 const TopBarContainer = styled.header`
     display: flex;
@@ -101,7 +102,7 @@ const Avatar = styled.img`
 `;
 
 export const TopBar = () => {
-    const [searchQuery, setSearchQuery] = useState("");
+    const { searchQuery, setSearchQuery } = usePlayer();
 
     return (
         <TopBarContainer>

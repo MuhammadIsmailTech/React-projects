@@ -1,11 +1,11 @@
-import React, { createContext, useState, useRef, useEffect } from "react";
+import React, { createContext, useState, useRef, useEffect, useMemo } from "react";
 import { musicLibrary } from "../data/musicLibrary";
 
 export const PlayerContext = createContext();
 
 export const PlayerProvider = ({ children }) => {
     const audioRef = useRef(new Audio());
-    
+
     const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
@@ -16,8 +16,22 @@ export const PlayerProvider = ({ children }) => {
     const [repeatMode, setRepeatMode] = useState(0); // 0: no repeat, 1: repeat all, 2: repeat one
     const [queue, setQueue] = useState(musicLibrary);
     const [isSeeking, setIsSeeking] = useState(false);
-    const [darkMode, setDarkMode] = useState(true);
-    const [likedSongs, setLikedSongs] = useState([]);
+    const [darkMode, setDarkMode] = useState(() => {
+        try {
+            return JSON.parse(localStorage.getItem("flow_darkMode")) ?? true;
+        } catch (e) {
+            return true;
+        }
+    });
+    const [likedSongs, setLikedSongs] = useState(() => {
+        try {
+            return JSON.parse(localStorage.getItem("flow_likedSongs")) || [];
+        } catch (e) {
+            return [];
+        }
+    });
+
+    const [searchQuery, setSearchQuery] = useState("");
 
     const audio = audioRef.current;
 
@@ -26,10 +40,36 @@ export const PlayerProvider = ({ children }) => {
         audio.volume = volume;
     }, [volume, audio]);
 
+    // Persist likes and theme
+    useEffect(() => {
+        try {
+            localStorage.setItem("flow_likedSongs", JSON.stringify(likedSongs));
+        } catch (e) {}
+    }, [likedSongs]);
+
+    useEffect(() => {
+        try {
+            localStorage.setItem("flow_darkMode", JSON.stringify(darkMode));
+        } catch (e) {}
+    }, [darkMode]);
+
+    // Filtered queue based on search
+    const filteredQueue = useMemo(() => {
+        const q = searchQuery.trim().toLowerCase();
+        if (!q) return queue;
+        return queue.filter((t) => {
+            return (
+                t.title.toLowerCase().includes(q) ||
+                t.artist.toLowerCase().includes(q) ||
+                (t.album || "").toLowerCase().includes(q)
+            );
+        });
+    }, [queue, searchQuery]);
+
     // Load track
     const loadTrack = (index) => {
         if (index < 0 || index >= queue.length) return;
-        
+
         const track = queue[index];
         audio.src = track.src;
         setCurrentTrackIndex(index);
@@ -39,7 +79,13 @@ export const PlayerProvider = ({ children }) => {
     // Play track
     const playTrack = (index = currentTrackIndex) => {
         loadTrack(index);
-        audio.play();
+        const p = audio.play();
+        if (p && typeof p.then === "function") {
+            p.catch(() => {
+                // playback failed (CORS or user gesture), gracefully pause
+                setIsPlaying(false);
+            });
+        }
         setIsPlaying(true);
     };
 
@@ -61,7 +107,7 @@ export const PlayerProvider = ({ children }) => {
     // Next track
     const nextTrack = () => {
         let nextIndex = currentTrackIndex + 1;
-        
+
         if (nextIndex >= queue.length) {
             if (repeatMode === 1) {
                 nextIndex = 0; // Loop back to start if repeat all
@@ -70,7 +116,7 @@ export const PlayerProvider = ({ children }) => {
                 return;
             }
         }
-        
+
         playTrack(nextIndex);
     };
 
@@ -91,7 +137,7 @@ export const PlayerProvider = ({ children }) => {
 
     // Toggle shuffle
     const toggleShuffle = () => {
-        setIsShuffled(!isShuffled);
+        setIsShuffled((s) => !s);
     };
 
     // Cycle repeat mode
@@ -102,9 +148,7 @@ export const PlayerProvider = ({ children }) => {
     // Toggle like
     const toggleLike = (trackId) => {
         setLikedSongs((prev) =>
-            prev.includes(trackId)
-                ? prev.filter((id) => id !== trackId)
-                : [...prev, trackId]
+            prev.includes(trackId) ? prev.filter((id) => id !== trackId) : [...prev, trackId]
         );
     };
 
@@ -136,7 +180,7 @@ export const PlayerProvider = ({ children }) => {
 
     // Toggle dark mode
     const toggleDarkMode = () => {
-        setDarkMode(!darkMode);
+        setDarkMode((d) => !d);
     };
 
     // Audio event listeners
@@ -172,6 +216,36 @@ export const PlayerProvider = ({ children }) => {
         };
     }, [audio, currentTrackIndex, repeatMode, isSeeking, queue]);
 
+    // Keyboard shortcuts
+    useEffect(() => {
+        const handler = (e) => {
+            const tag = (e.target && e.target.tagName) || "";
+            if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+            if (e.code === "Space") {
+                e.preventDefault();
+                togglePlayPause();
+            } else if (e.code === "ArrowRight") {
+                nextTrack();
+            } else if (e.code === "ArrowLeft") {
+                previousTrack();
+            } else if (e.code === "ArrowUp") {
+                e.preventDefault();
+                handleVolumeChange(Math.min(1, volume + 0.05));
+            } else if (e.code === "ArrowDown") {
+                e.preventDefault();
+                handleVolumeChange(Math.max(0, volume - 0.05));
+            } else if (e.key === "m") {
+                toggleMute();
+            } else if (e.key === "s") {
+                toggleShuffle();
+            }
+        };
+
+        window.addEventListener("keydown", handler);
+        return () => window.removeEventListener("keydown", handler);
+    }, [volume, togglePlayPause, nextTrack, previousTrack]);
+
     const value = {
         // State
         currentTrackIndex,
@@ -183,9 +257,11 @@ export const PlayerProvider = ({ children }) => {
         isShuffled,
         repeatMode,
         queue,
+        filteredQueue,
         isSeeking,
         darkMode,
         likedSongs,
+        searchQuery,
         currentTrack: queue[currentTrackIndex] || null,
 
         // Methods
@@ -204,11 +280,8 @@ export const PlayerProvider = ({ children }) => {
         toggleDarkMode,
         setIsSeeking,
         loadTrack,
+        setSearchQuery,
     };
 
-    return (
-        <PlayerContext.Provider value={value}>
-            {children}
-        </PlayerContext.Provider>
-    );
+    return <PlayerContext.Provider value={value}>{children}</PlayerContext.Provider>;
 };

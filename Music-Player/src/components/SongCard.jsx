@@ -126,13 +126,13 @@ const LikeButton = styled.button`
     }
 `;
 
-export const SongCard = ({ track }) => {
+export const SongCard = ({ track, index }) => {
     const { currentTrack, playTrack, currentTrackIndex, likedSongs, toggleLike } = usePlayer();
     const isActive = currentTrack?.id === track.id;
     const isLiked = likedSongs.includes(track.id);
 
     const handlePlayClick = () => {
-        playTrack(currentTrackIndex);
+        playTrack(index);
     };
 
     return (
