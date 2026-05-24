@@ -6,8 +6,8 @@ const projects = [
     tech: ['React', 'REST API', 'Tailwind CSS'],
     category: 'API',
     status: 'Live',
-    liveLink: '/music-player',
-    githubLink: '#'
+    liveLink: 'https://react-projects-7msj.vercel.app/',
+    githubLink: 'https://github.com/MuhammadIsmailTech/Music-Player'
   },
   {
     id: 2,
