@@ -11,13 +11,13 @@ const projects = [
   },
   {
     id: 2,
-    name: 'Portfolio Studio',
-    description: 'A polished portfolio hero and project showcase for designers and developers.',
-    tech: ['React', 'Animations', 'Responsive UI'],
+    name: 'Cryptograpy',
+    description: 'A modern cryptocurrency tracking and visualization dashboard.',
+    tech: ['React', 'CoinGecko API', 'Chart.js'],
     category: 'UI',
     status: 'New',
-    liveLink: '#',
-    githubLink: '#'
+    liveLink: 'https://react-projects-puce-three.vercel.app/dashboard',
+    githubLink: 'https://github.com/MuhammadIsmailTech/React-projects/tree/main/Cryptograpy'
   },
   {
     id: 3,
