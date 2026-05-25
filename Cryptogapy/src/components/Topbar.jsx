@@ -3,7 +3,7 @@ import { useAppContext } from '../context/AppContext.jsx';
 import ToggleSwitch from './ToggleSwitch.jsx';
 
 function Topbar() {
-  const { toggleTheme, theme, dummyData } = useAppContext();
+  const { toggleTheme, theme, dummyData, searchQuery, setSearchQuery } = useAppContext();
 
   return (
     <header className="sticky top-0 z-20 border-b border-slate-800/80 bg-slate-950/95 backdrop-blur-xl">
@@ -14,6 +14,8 @@ function Topbar() {
           </button>
           <div className="relative flex-1">
             <input
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
               className="w-full rounded-3xl border border-slate-700/80 bg-slate-900/80 px-4 py-3 text-sm text-slate-200 outline-none transition focus:border-brand"
               placeholder="Search coins, pairs, news..."
               aria-label="Search"

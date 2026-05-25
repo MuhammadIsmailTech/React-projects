@@ -10,7 +10,7 @@ import CryptoConverter from '../components/CryptoConverter.jsx';
 import { formatCurrency, formatCurrencyCompact, formatPercent } from '../utils/format.js';
 
 function Dashboard() {
-  const { coins, trending, loading, error, dummyData, watchlist, theme, searchQuery, setSearchQuery } = useAppContext();
+  const { coins, trending, loading, error, dummyData, watchlist, removeFromWatchlist, theme, searchQuery, setSearchQuery } = useAppContext();
 
   const portfolioValue = dummyData.user.balance;
   const profitValue = dummyData.user.profit;
@@ -79,7 +79,7 @@ function Dashboard() {
             </div>
           </motion.div>
 
-          <Watchlist coins={dummyData.watchlist} />
+          <Watchlist coins={coins} watchlist={watchlist} removeFromWatchlist={removeFromWatchlist} />
           <CryptoConverter />
         </aside>
       </div>
