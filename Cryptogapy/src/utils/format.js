@@ -7,6 +7,16 @@ export const formatCurrency = (value) => {
   });
 };
 
+export const formatCurrencyCompact = (value) => {
+  if (typeof value !== 'number') return '$0';
+  return value.toLocaleString('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 2,
+    notation: 'compact'
+  });
+};
+
 export const formatPercent = (value) => {
   if (typeof value !== 'number') return '0%';
   const sign = value >= 0 ? '+' : '';

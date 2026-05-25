@@ -7,7 +7,7 @@ import TrendSection from '../components/TrendSection.jsx';
 import NewsSection from '../components/NewsSection.jsx';
 import Watchlist from '../components/Watchlist.jsx';
 import CryptoConverter from '../components/CryptoConverter.jsx';
-import { formatCurrency, formatPercent } from '../utils/format.js';
+import { formatCurrency, formatCurrencyCompact, formatPercent } from '../utils/format.js';
 
 function Dashboard() {
   const { coins, trending, loading, error, dummyData, watchlist, theme, searchQuery, setSearchQuery } = useAppContext();
@@ -52,7 +52,7 @@ function Dashboard() {
           </div>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
-            <StatsCard title="Total Value Locked" amount={formatCurrency(totalVolume)} accent="from-cyan-400 to-blue-600" />
+            <StatsCard title="Total Value Locked" amount={formatCurrencyCompact(totalVolume)} accent="from-cyan-400 to-blue-600" />
             <StatsCard title="Active Watchlist" amount={watchlist.length} accent="from-fuchsia-500 to-violet-600" />
             <StatsCard title="Trending Now" amount={trending.length} accent="from-emerald-400 to-teal-500" />
           </div>
