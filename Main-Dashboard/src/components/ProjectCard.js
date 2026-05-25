@@ -1,6 +1,9 @@
 import { motion } from 'framer-motion';
 
-const ProjectCard = ({ project, index }) => {
+const ProjectCard = ({ project, index, isFavorite, onToggleFavorite }) => {
+  const hasLiveLink = project.liveLink && project.liveLink !== '#';
+  const hasGithubLink = project.githubLink && project.githubLink !== '#';
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 30 }}
@@ -8,7 +11,7 @@ const ProjectCard = ({ project, index }) => {
       transition={{ duration: 0.5, delay: index * 0.08 }}
       className="group rounded-[2rem] border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/60 transition duration-300 hover:-translate-y-1 hover:shadow-emerald-200/40 dark:border-slate-800 dark:bg-slate-900 dark:shadow-none"
     >
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex items-center justify-between gap-4">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-600">{project.category}</p>
           <h3 className="mt-3 text-2xl font-semibold text-slate-900 dark:text-slate-100">{project.name}</h3>
@@ -28,22 +31,60 @@ const ProjectCard = ({ project, index }) => {
       </div>
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-        <a
-          href={project.liveLink}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex flex-1 items-center justify-center rounded-3xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-500"
+        {hasLiveLink ? (
+          <a
+            href={project.liveLink}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex flex-1 items-center justify-center rounded-3xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-500"
+          >
+            Live Demo
+          </a>
+        ) : (
+          <button
+            type="button"
+            disabled
+            className="inline-flex flex-1 cursor-not-allowed items-center justify-center rounded-3xl bg-slate-200 px-5 py-3 text-sm font-semibold text-slate-500 transition dark:bg-slate-800 dark:text-slate-400"
+            title="Live demo coming soon"
+          >
+            Coming Soon
+          </button>
+        )}
+
+        {hasGithubLink ? (
+          <a
+            href={project.githubLink}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex flex-1 items-center justify-center rounded-3xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-emerald-400 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-900"
+          >
+            GitHub Source
+          </a>
+        ) : (
+          <button
+            type="button"
+            disabled
+            className="inline-flex flex-1 cursor-not-allowed items-center justify-center rounded-3xl border border-slate-200 bg-slate-200 px-5 py-3 text-sm font-semibold text-slate-500 transition dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"
+            title="Source unavailable"
+          >
+            Coming Soon
+          </button>
+        )}
+      </div>
+
+      <div className="mt-4 flex items-center justify-between gap-3">
+        <button
+          type="button"
+          onClick={onToggleFavorite}
+          className={`inline-flex items-center justify-center rounded-3xl px-5 py-3 text-sm font-semibold transition ${
+            isFavorite
+              ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/20'
+              : 'border border-slate-200 bg-white text-slate-700 hover:border-emerald-400 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-900'
+          }`}
         >
-          Live Demo
-        </a>
-        <a
-          href={project.githubLink}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex flex-1 items-center justify-center rounded-3xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-emerald-400 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-900"
-        >
-          GitHub Source
-        </a>
+          {isFavorite ? 'Saved to Favorites' : 'Save to Favorites'}
+        </button>
+        <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Click to bookmark</span>
       </div>
     </motion.article>
   );

@@ -16,7 +16,7 @@ const projects = [
     tech: ['React', 'CoinGecko API', 'Chart.js'],
     category: 'UI',
     status: 'New',
-    liveLink: 'https://react-projects-puce-three.vercel.app/dashboard',
+    liveLink: 'https://react-projects-puce-three.vercel.app/',
     githubLink: 'https://github.com/MuhammadIsmailTech/React-projects/tree/main/Cryptograpy'
   },
   {

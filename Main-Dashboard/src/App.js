@@ -6,12 +6,26 @@ import ProjectCard from './components/ProjectCard';
 import Footer from './components/Footer';
 import projectsData from './data/projects';
 
-const categories = ['All', 'UI', 'API', 'Full Stack'];
+const categories = ['All', 'Favorites', 'UI', 'API', 'Full Stack'];
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
   const [darkMode, setDarkMode] = useState(false);
+  const [favorites, setFavorites] = useState(() => {
+    if (typeof window === 'undefined') return [];
+    return JSON.parse(localStorage.getItem('project-favorites') || '[]');
+  });
+
+  const toggleFavorite = (projectId) => {
+    setFavorites((current) => {
+      const next = current.includes(projectId)
+        ? current.filter((id) => id !== projectId)
+        : [...current, projectId];
+      localStorage.setItem('project-favorites', JSON.stringify(next));
+      return next;
+    });
+  };
 
   const filteredProjects = useMemo(() => {
     return projectsData.filter((project) => {
@@ -19,10 +33,14 @@ function App() {
         field.toLowerCase().includes(searchTerm.toLowerCase())
       );
 
-      const matchesCategory = activeCategory === 'All' || project.category === activeCategory;
+      const matchesCategory =
+        activeCategory === 'All' ||
+        (activeCategory === 'Favorites' && favorites.includes(project.id)) ||
+        project.category === activeCategory;
+
       return matchesSearch && matchesCategory;
     });
-  }, [searchTerm, activeCategory]);
+  }, [searchTerm, activeCategory, favorites]);
 
   return (
     <div className={darkMode ? 'dark' : ''}>
@@ -69,6 +87,7 @@ function App() {
           </section>
 
           <motion.section
+            id="projects"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
@@ -77,7 +96,13 @@ function App() {
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {filteredProjects.length > 0 ? (
                 filteredProjects.map((project, index) => (
-                  <ProjectCard key={project.id} project={project} index={index} />
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    index={index}
+                    isFavorite={favorites.includes(project.id)}
+                    onToggleFavorite={() => toggleFavorite(project.id)}
+                  />
                 ))
               ) : (
                 <div className="col-span-full rounded-3xl border border-dashed border-slate-300 bg-slate-100 p-12 text-center text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
