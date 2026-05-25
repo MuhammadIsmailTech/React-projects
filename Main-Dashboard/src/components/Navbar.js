@@ -22,7 +22,7 @@ const Navbar = ({ darkMode, onToggleTheme }) => {
         <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 dark:text-slate-300 md:flex">
           <a href="#home" className="hover:text-emerald-600 dark:hover:text-emerald-400">Home</a>
           <a href="#projects" className="hover:text-emerald-600 dark:hover:text-emerald-400">Projects</a>
-          <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-emerald-600 dark:hover:text-emerald-400">GitHub</a>
+          <a href="https://github.com/MuhammadIsmailTech/React-projects" target="_blank" rel="noreferrer" className="hover:text-emerald-600 dark:hover:text-emerald-400">GitHub</a>
         </nav>
 
         <button

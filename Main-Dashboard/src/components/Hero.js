@@ -18,7 +18,7 @@ const Hero = () => {
             Browse Projects
           </a>
           <a
-            href="https://github.com"
+            href="https://github.com/MuhammadIsmailTech/React-projects"
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center justify-center rounded-3xl border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:border-white hover:bg-white/20"

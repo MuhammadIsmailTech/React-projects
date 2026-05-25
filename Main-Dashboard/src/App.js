@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -11,7 +11,10 @@ const categories = ['All', 'Favorites', 'UI', 'API', 'Full Stack'];
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem('md-theme') === 'dark';
+  });
   const [favorites, setFavorites] = useState(() => {
     if (typeof window === 'undefined') return [];
     return JSON.parse(localStorage.getItem('project-favorites') || '[]');
@@ -26,6 +29,18 @@ function App() {
       return next;
     });
   };
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('md-theme', darkMode ? 'dark' : 'light');
+    } catch (e) {}
+    if (typeof document !== 'undefined') {
+      if (darkMode) document.documentElement.classList.add('dark');
+      else document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
+
+  const handleToggleTheme = () => setDarkMode((prev) => !prev);
 
   const filteredProjects = useMemo(() => {
     return projectsData.filter((project) => {
@@ -45,7 +60,7 @@ function App() {
   return (
     <div className={darkMode ? 'dark' : ''}>
       <div className="min-h-screen bg-slate-50 text-slate-900 transition-colors duration-500 dark:bg-slate-950 dark:text-slate-100">
-        <Navbar darkMode={darkMode} onToggleTheme={() => setDarkMode((prev) => !prev)} />
+        <Navbar darkMode={darkMode} onToggleTheme={handleToggleTheme} />
 
         <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <Hero />
