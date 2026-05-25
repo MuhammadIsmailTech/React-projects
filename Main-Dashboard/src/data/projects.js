@@ -7,7 +7,7 @@ const projects = [
     category: 'API',
     status: 'Live',
     liveLink: 'https://react-projects-7msj.vercel.app/',
-    githubLink: 'https://github.com/MuhammadIsmailTech/Music-Player'
+    githubLink: 'https://github.com/MuhammadIsmailTech/React-projects/tree/main/Music-Player'
   },
   {
     id: 2,
