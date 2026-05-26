@@ -3,7 +3,6 @@
 Welcome to my React Projects Repository! 👋  
 This repository contains a collection of modern React.js projects built to improve my frontend development skills and showcase real-world applications.
 
-
 ## About This Repository
 
 This repository is designed as a **central hub** for all my React projects.  
@@ -54,7 +53,6 @@ I am planning to build and add the following advanced projects to this repositor
 
 > 🚧 More projects will be added regularly!
 
-
 ## Purpose
 
 The goal of this repository is to:
@@ -72,5 +70,6 @@ Clone the repository:
 ```bash
 git clone https://github.com/MuhammadIsmailTech/React-projects
 cd React-projects
-
-## Star if you like it
+```
+## Star the Repository If like it
+- Jazzakallah
