@@ -40,7 +40,24 @@ function Dashboard() {
     { label: 'Pay', icon: ShoppingBag, color: 'bg-slate-900/90 text-slate-100' }
   ];
 
-  const sparklinePath = 'M2 15 L14 10 L26 12 L38 8 L50 11 L62 7 L74 4';
+  const getSparklinePath = (prices = []) => {
+    const points = prices.slice(-20);
+    if (points.length < 2) return '';
+
+    const width = 72;
+    const height = 24;
+    const padding = 4;
+    const min = Math.min(...points);
+    const max = Math.max(...points);
+
+    return points
+      .map((price, index) => {
+        const x = padding + (index / (points.length - 1)) * (width - padding * 2);
+        const y = height - padding - ((price - min) / Math.max(max - min, 1)) * (height - padding * 2);
+        return `${index === 0 ? 'M' : 'L'}${x} ${y}`;
+      })
+      .join(' ');
+  };
 
   const bottomNav = [
     { label: 'Home', icon: Home },
@@ -116,6 +133,7 @@ function Dashboard() {
             );
           })}
         </div>
+      </div>
       </motion.section>
 
       <motion.section initial={{ y: 20, opacity: 0, delay: 0.05 }} animate={{ y: 0, opacity: 1 }} className="card-glass p-6">
@@ -148,7 +166,7 @@ function Dashboard() {
                         <stop offset="100%" stopColor="#38bdf8" />
                       </linearGradient>
                     </defs>
-                    <path d={sparklinePath} fill="none" stroke="url(#spark-${coin.id})" strokeWidth="2.2" strokeLinecap="round" />
+                    <path d={getSparklinePath(coin.sparkline_in_7d?.price)} fill="none" stroke={`url(#spark-${coin.id})`} strokeWidth="2.2" strokeLinecap="round" />
                   </svg>
                 </div>
                 <div className="text-right">
@@ -172,15 +190,8 @@ function Dashboard() {
               <h2 className="text-xl font-semibold">Market prices</h2>
               <p className="text-sm text-slate-400">Live crypto prices updated from CoinGecko API.</p>
             </div>
-            <div className="relative w-full max-w-md">
-              <label className="sr-only" htmlFor="market-search">Search coins</label>
-              <input
-                id="market-search"
-                className="w-full rounded-3xl border border-slate-700/80 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-cyan-400"
-                placeholder="Search BTC, ETH, ADA..."
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-              />
+            <div className="rounded-3xl border border-slate-700/80 bg-slate-900/80 px-4 py-3 text-sm text-slate-300">
+              Search is available in the top header.
             </div>
           </div>
 

@@ -77,31 +77,37 @@ function CryptoTable({ coins, loading }) {
                   whileHover={{ scale: 1.01 }}
                   className="group grid min-w-0 grid-cols-[3fr_1fr_1fr_1fr_1fr_0.9fr] items-center gap-4 px-6 py-5 transition hover:bg-slate-900/70"
                 >
-                  <Link to={`/coin/${coin.id}`} className="flex min-w-0 items-center gap-4 truncate">
-                    <img src={coin.image} alt={coin.name} className="h-10 w-10 rounded-full" />
-                  <div className="min-w-0">
-                    <p className="truncate font-semibold text-slate-100">{coin.name}</p>
-                    <p className="truncate text-sm text-slate-500">{coin.symbol.toUpperCase()}</p>
+                  <div className="flex min-w-0 items-center gap-4">
+                    <Link to={`/coin/${coin.id}`} className="flex min-w-0 items-center gap-4 truncate">
+                      <img src={coin.image} alt={coin.name} className="h-10 w-10 rounded-full" />
+                      <div className="min-w-0">
+                        <p className="truncate font-semibold text-slate-100">{coin.name}</p>
+                        <p className="truncate text-sm text-slate-500">{coin.symbol.toUpperCase()}</p>
+                      </div>
+                    </Link>
                   </div>
-                </Link>
-                <p className="min-w-0 font-semibold text-slate-100">{formatCurrency(coin.current_price)}</p>
-                <p className={`min-w-0 font-semibold ${coin.price_change_percentage_24h >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                  {formatPercent(coin.price_change_percentage_24h)}
-                </p>
-                <p className="min-w-0 text-sm text-slate-400">{formatMarketCap(coin.market_cap)}</p>
-                <p className="min-w-0 text-sm text-slate-400">{formatCurrencyCompact(coin.total_volume)}</p>
-                <button
-                  type="button"
-                  onClick={() => (inWatchlist ? removeFromWatchlist(coin.id) : addToWatchlist(coin.id))}
-                  className={`inline-flex h-10 min-w-[100px] items-center justify-center rounded-3xl px-3 text-sm font-semibold transition ${
-                    inWatchlist ? 'bg-rose-500 text-white hover:bg-rose-400' : 'bg-emerald-600 text-white hover:bg-emerald-500'
-                  }`}
-                >
-                  {inWatchlist ? 'Remove' : 'Watch'}
-                </button>
-              </motion.div>
-            );
-          })}
+
+                  <div className="min-w-0 font-semibold text-slate-100">{formatCurrency(coin.current_price)}</div>
+                  <div className={`min-w-0 font-semibold ${coin.price_change_percentage_24h >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    {formatPercent(coin.price_change_percentage_24h)}
+                  </div>
+                  <div className="min-w-0 text-sm text-slate-400">{formatMarketCap(coin.market_cap)}</div>
+                  <div className="min-w-0 text-sm text-slate-400">{formatCurrencyCompact(coin.total_volume)}</div>
+                  <div className="flex justify-end">
+                    <button
+                      type="button"
+                      onClick={() => (inWatchlist ? removeFromWatchlist(coin.id) : addToWatchlist(coin.id))}
+                      className={`inline-flex h-10 min-w-[100px] items-center justify-center rounded-3xl px-3 text-sm font-semibold transition ${
+                        inWatchlist ? 'bg-rose-500 text-white hover:bg-rose-400' : 'bg-emerald-600 text-white hover:bg-emerald-500'
+                      }`}
+                    >
+                      {inWatchlist ? 'Remove' : 'Watch'}
+                    </button>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

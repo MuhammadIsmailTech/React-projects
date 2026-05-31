@@ -11,14 +11,14 @@ import NotFound from './pages/NotFound.jsx';
 function App() {
   const { theme } = useAppContext();
   const location = useLocation();
-  const hideDashboardNav = ['/login', '/signup', '/dashboard'].includes(location.pathname);
+  const hideAppShell = ['/login', '/signup'].includes(location.pathname);
 
   return (
     <div className={`${theme === 'light' ? 'bg-slate-100 text-slate-900' : 'bg-slate-950 text-slate-100'} min-h-screen transition-colors duration-500`}>
       <div className="flex min-h-screen">
-        {!hideDashboardNav && <Sidebar />}
+        {!hideAppShell && <Sidebar />}
         <main className="flex-1">
-          {!hideDashboardNav && <Topbar />}
+          {!hideAppShell && <Topbar />}
           <div className="px-4 py-4 lg:px-6">
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />

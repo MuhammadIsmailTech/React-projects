@@ -6,8 +6,8 @@ const AppContext = createContext({});
 
 export function AppProvider({ children }) {
   const [theme, setTheme] = useState('dark');
-  const [coins, setCoins] = useState([]);
-  const [trending, setTrending] = useState([]);
+  const [coins, setCoins] = useState(dummyData.watchlist);
+  const [trending, setTrending] = useState(dummyData.watchlist);
   const [selectedCoin, setSelectedCoin] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -39,7 +39,9 @@ export function AppProvider({ children }) {
         const trendingData = await fetchTrendingCoins();
         setTrending(trendingData);
       } catch (fetchError) {
-        setError('Unable to load live market information. Please try again later.');
+        setError('Unable to load live market information. Showing sample data instead.');
+        setCoins(dummyData.watchlist);
+        setTrending(dummyData.watchlist);
       } finally {
         setLoading(false);
       }

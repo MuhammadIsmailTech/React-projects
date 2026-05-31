@@ -4,7 +4,7 @@ import { useAppContext } from '../context/AppContext.jsx';
 
 const navItems = [
   { id: 'dashboard', href: '/dashboard', label: 'Dashboard', icon: Home },
-  { id: 'markets', href: '/coin/bitcoin', label: 'Markets', icon: BarChart3 },
+  { id: 'markets', href: '/dashboard', label: 'Markets', icon: BarChart3 },
   { id: 'portfolio', href: '/dashboard', label: 'Portfolio', icon: Layers },
   { id: 'watchlist', href: '/dashboard', label: 'Watchlist', icon: Star },
   { id: 'security', href: '/dashboard', label: 'Security', icon: ShieldCheck }

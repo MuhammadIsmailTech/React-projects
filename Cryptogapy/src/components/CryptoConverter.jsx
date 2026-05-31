@@ -12,7 +12,8 @@ function CryptoConverter() {
   const [target, setTarget] = useState('BTC');
 
   const result = useMemo(() => {
-    return amount * (rates[target] || 1);
+    const numericAmount = Number(amount) || 0;
+    return numericAmount * (rates[target] || 1);
   }, [amount, target]);
 
   return (
