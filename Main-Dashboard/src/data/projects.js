@@ -21,13 +21,13 @@ const projects = [
   },
   {
     id: 3,
-    name: 'Task Tracker',
-    description: 'A task management dashboard with filtering, categories, and drag interactions.',
-    tech: ['React', 'Local Storage', 'UX Design'],
-    category: 'Full Stack',
+    name: 'Crypto Tracker',
+    description: 'A Crypto Tracker app that allows users to track their favorite cryptocurrencies and view real-time price updates.',
+    tech: ['React', 'CoinGecko API', 'UX Design'],
+    category: 'UI',
     status: 'Stable',
-    liveLink: '#',
-    githubLink: '#'
+    liveLink: 'https://react-projects-b4t2.vercel.app/',
+    githubLink: 'https://github.com/MuhammadIsmailTech/React-projects/tree/main/Crypto_Tracker_App'
   },
   {
     id: 4,
