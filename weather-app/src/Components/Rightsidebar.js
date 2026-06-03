@@ -1,63 +1,119 @@
-import React, { useState } from 'react'
+import React from 'react';
 
-export default function Rightsidebar({ dailyWeatherData, fetchWeather, city }) {
-
-  const [searchVal, setSearchVal] = useState("Pune");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    fetchWeather(searchVal);
-  }
-
+export default function Rightsidebar({
+  city,
+  forecast,
+  searchVal,
+  setSearchVal,
+  units,
+  onUnitChange,
+  onSearch,
+  onLocation,
+  onHistoryClick,
+  history,
+  isLoading,
+  error,
+}) {
   const getDay = (dt) => {
-    let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     return days[new Date(dt * 1000).getDay()];
-  }
+  };
+
+  const getHour = (dt, timezone) => {
+    return new Date((dt + timezone) * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
 
   return (
-    <div className="w-3/4 p-6">
+    <main className="right-panel">
+      <section className="panel panel-search">
+        <form className="search-bar" onSubmit={onSearch}>
+          <input
+            type="text"
+            value={searchVal}
+            onChange={(e) => setSearchVal(e.target.value)}
+            placeholder="Search city"
+          />
+          <button type="submit" className="btn btn-primary">
+            Search
+          </button>
+        </form>
 
-      <form className="rounded-full border flex border-gray-700 group" onSubmit={(e) => handleSubmit(e)}>
-        <input value={searchVal} onChange={(e) => setSearchVal(e.target.value)} className="group-hover:border-blue-800 outline-none p-2 bg-transparent rounded-full flex-1" type="text" placeholder="Search.." name="city" />
-        <button type="submit" className="px-4 py-2 bg-blue-700 hover:bg-blue-800 rounded-full">Search</button>
-      </form>
-
-      <div className="flex flex-col gap-3 mt-4">
-        <h3 className="flex justify-between items-center font-medium">PRESSURE <span>{city.pressure} hPa</span></h3>
-        <h3 className="flex justify-between items-center font-medium">HUMIDITY <span>{city.humidity} %</span></h3>
-        <h3 className="flex justify-between items-center font-medium">WIND <span>{Math.floor(city.speed * 3.6)} km/h</span></h3>
-      </div>
-
-      <div className="flex bg-gray-700 my-6 gap-2 rounded-lg h-32">
-        <div className="flex bg-white rounded-lg p-5 text-black flex-col items-center gap-2">
-          {/* <i className="wi wi-day-sunny text-3xl"></i> */}
-          <span className="font-medium">{getDay(city.dt)}</span>
-          <span>{Math.floor(city.temp)}°C</span>
-          <span>{city.weathermood}</span>
+        <div className="actions-row">
+          <div className="unit-switch">
+            <button
+              type="button"
+              className={units === 'metric' ? 'btn active' : 'btn'}
+              onClick={() => onUnitChange('metric')}
+            >
+              °C
+            </button>
+            <button
+              type="button"
+              className={units === 'imperial' ? 'btn active' : 'btn'}
+              onClick={() => onUnitChange('imperial')}
+            >
+              °F
+            </button>
+          </div>
+          <button type="button" className="btn btn-secondary" onClick={onLocation}>
+            Use My Location
+          </button>
         </div>
 
-        {
+        {error && <p className="message message-error">{error}</p>}
+        {isLoading && <p className="message message-info">Loading weather data…</p>}
 
-          (!dailyWeatherData.daily) ? "" :
+        {history.length > 0 && (
+          <div className="history-card">
+            <h3>Recent searches</h3>
+            <div className="history-list">
+              {history.map((item) => (
+                <button key={item} type="button" className="history-item" onClick={() => onHistoryClick(item)}>
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </section>
 
-            dailyWeatherData.daily.filter((e, index) => index > 0 && index < 5)
-              .map((elem, i) => {
+      {city && forecast && (
+        <>
+          <section className="panel panel-summary">
+            <div className="summary-header">
+              <h3>5-Day Forecast</h3>
+              <p>Weather predictions for the next five days.</p>
+            </div>
+            <div className="forecast-grid">
+              {forecast.daily.slice(1, 6).map((day) => (
+                <div key={day.dt} className="forecast-card">
+                  <span>{getDay(day.dt)}</span>
+                  <img src={`https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`} alt={day.weather[0].description} />
+                  <p>{day.weather[0].main}</p>
+                  <strong>{Math.round(day.temp.day)}{units === 'metric' ? '°C' : '°F'}</strong>
+                </div>
+              ))}
+            </div>
+          </section>
 
-                return (
-                  <div className="flex flex-col p-5 items-center gap-2" key={i}>
-                    {/* <i className="wi wi-day-sunny text-3xl"></i> */}
-                    <span className="font-medium">{getDay(elem.dt)}</span>
-                    <span>{Math.floor(elem.temp.day)}°C</span>
-                    <span>{elem.weather[0].main}</span>
-                  </div>
-                )
-              })
-
-        }
-
-      </div>
-
-      {/* <button className="px-6 py-2 bg-blue-600 rounded-full">Change Location</button> */}
-    </div>
-  )
+          <section className="panel panel-hourly">
+            <div className="summary-header">
+              <h3>Hourly Outlook</h3>
+              <p>Upcoming hours for the selected city.</p>
+            </div>
+            <div className="hourly-scroll">
+              {forecast.hourly.slice(0, 8).map((hour) => (
+                <div key={hour.dt} className="hour-card">
+                  <span>{getHour(hour.dt, forecast.timezone_offset)}</span>
+                  <img src={`https://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png`} alt={hour.weather[0].description} />
+                  <strong>{Math.round(hour.temp)}{units === 'metric' ? '°C' : '°F'}</strong>
+                  <small>{hour.weather[0].main}</small>
+                </div>
+              ))}
+            </div>
+          </section>
+        </>
+      )}
+    </main>
+  );
 }
