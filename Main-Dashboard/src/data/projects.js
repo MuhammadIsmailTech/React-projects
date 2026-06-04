@@ -36,8 +36,8 @@ const projects = [
     tech: ['React', 'OpenWeather API', 'Responsive Layout'],
     category: 'API',
     status: 'Live',
-    liveLink: '#',
-    githubLink: '#'
+    liveLink: 'https://vercel.com/muhammadismail-gifs-projects/react-projects-3t98',
+    githubLink: 'https://github.com/MuhammadIsmailTech/React-projects/tree/main/weather-app'
   },
   {
     id: 5,
