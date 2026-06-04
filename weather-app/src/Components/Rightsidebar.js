@@ -63,7 +63,7 @@ export default function Rightsidebar({
         {error && <p className="message message-error">{error}</p>}
         {isLoading && <p className="message message-info">Loading weather data…</p>}
 
-        {history.length > 0 && (
+        {history && history.length > 0 && (
           <div className="history-card">
             <h3>Recent searches</h3>
             <div className="history-list">

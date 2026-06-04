@@ -1,224 +1,101 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import './App.css';
-import Leftsidebar from './Components/Leftsidebar';
-import Rightsidebar from './Components/Rightsidebar';
+import Header from './components/Header.jsx';
+import Hero from './components/Hero.jsx';
+import ForecastRow from './components/ForecastRow.jsx';
+import HourlyRow from './components/HourlyRow.jsx';
+import PaginationDots from './components/PaginationDots.jsx';
 
-const DEFAULT_CITY = 'Pune';
-const HISTORY_KEY = 'weather-app-history';
+const DEFAULT_CITY = 'Inverness';
 
-function App() {
+export default function App() {
   const [city, setCity] = useState(null);
   const [forecast, setForecast] = useState(null);
-  const [searchVal, setSearchVal] = useState(DEFAULT_CITY);
-  const [units, setUnits] = useState('metric');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [history, setHistory] = useState(() => {
-    const saved = localStorage.getItem(HISTORY_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  const saveHistory = (cityName) => {
-    setHistory((prev) => {
-      const normalized = cityName.trim();
-      const updated = [normalized, ...prev.filter((item) => item.toLowerCase() !== normalized.toLowerCase())].slice(0, 5);
-      localStorage.setItem(HISTORY_KEY, JSON.stringify(updated));
-      return updated;
-    });
-  };
 
   const getWeatherIconUrl = (icon) => `https://openweathermap.org/img/wn/${icon}@4x.png`;
 
-  const fetchForecast = async (lat, lon, selectedUnits) => {
+  const fetchWeather = async (search = DEFAULT_CITY) => {
     try {
-      const uri = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,alerts&units=${selectedUnits}&appid=${process.env.REACT_APP_API_KEY}`;
-      const response = await axios.get(uri);
-      setForecast(response.data);
-    } catch (err) {
-      console.error('Forecast error:', err);
-    }
-  };
-
-  const fetchWeather = async (search, selectedUnits = units) => {
-    if (!search || !search.trim()) {
-      setError('Please enter a city name.');
-      return;
-    }
-
-    setIsLoading(true);
-    setError('');
-
-    try {
-      const uri = `https://api.openweathermap.org/data/2.5/weather?q=${search.trim()}&units=${selectedUnits}&appid=${process.env.REACT_APP_API_KEY}`;
-      const response = await axios.get(uri);
-      const data = response.data;
-      const { temp, humidity, pressure, feels_like } = data.main;
-      const { main: weathermood, icon } = data.weather[0];
-      const { visibility } = data;
-      const { name, dt, timezone } = data;
-      const { lat, lon } = data.coord;
-      const { speed } = data.wind;
-      const { country, sunrise, sunset } = data.sys;
-
-      const localTime = new Date((dt + timezone) * 1000).toLocaleString([], {
-        weekday: 'long',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-
-      const weatherInfo = {
-        temp,
-        humidity,
-        pressure,
-        feels_like,
-        visibility,
-        weathermood,
-        name,
-        speed,
-        country,
-        sunrise,
-        sunset,
-        lat,
-        lon,
-        dt,
-        timezone,
-        icon,
-        iconUrl: getWeatherIconUrl(icon),
-        localTime,
+      const uri = `https://api.openweathermap.org/data/2.5/weather?q=${search}&units=metric&appid=${process.env.REACT_APP_API_KEY}`;
+      const res = await axios.get(uri);
+      const d = res.data;
+      const info = {
+        name: d.name,
+        temp: d.main.temp,
+        weathermood: d.weather[0].main,
+        icon: d.weather[0].main,
+        speed: d.wind.speed,
+        dt: d.dt,
+        timezone: d.timezone,
+        iconUrl: getWeatherIconUrl(d.weather[0].icon),
       };
-
-      setCity(weatherInfo);
-      saveHistory(name);
-      setSearchVal(name);
-      await fetchForecast(lat, lon, selectedUnits);
+      setCity(info);
+      // fetch forecast data (onecall)
+      const lat = d.coord.lat;
+      const lon = d.coord.lon;
+      const furi = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,alerts&units=metric&appid=${process.env.REACT_APP_API_KEY}`;
+      const fres = await axios.get(furi);
+      setForecast(fres.data);
     } catch (err) {
-      console.error('Search error:', err);
-      setError('City not found. Please try a different location.');
+      console.warn('Weather fetch failed', err);
       setCity(null);
       setForecast(null);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const fetchWeatherByCoords = async (lat, lon) => {
-    setIsLoading(true);
-    setError('');
-
-    try {
-      const uri = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${units}&appid=${process.env.REACT_APP_API_KEY}`;
-      const response = await axios.get(uri);
-      const data = response.data;
-      const { temp, humidity, pressure, feels_like } = data.main;
-      const { main: weathermood, icon } = data.weather[0];
-      const { visibility } = data;
-      const { name, dt, timezone } = data;
-      const { speed } = data.wind;
-      const { country, sunrise, sunset } = data.sys;
-
-      const localTime = new Date((dt + timezone) * 1000).toLocaleString([], {
-        weekday: 'long',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-
-      const weatherInfo = {
-        temp,
-        humidity,
-        pressure,
-        feels_like,
-        visibility,
-        weathermood,
-        name,
-        speed,
-        country,
-        sunrise,
-        sunset,
-        lat,
-        lon,
-        dt,
-        timezone,
-        icon,
-        iconUrl: getWeatherIconUrl(icon),
-        localTime,
-      };
-
-      setCity(weatherInfo);
-      saveHistory(name);
-      setSearchVal(name);
-      await fetchForecast(lat, lon, units);
-    } catch (err) {
-      console.error('Geolocation weather error:', err);
-      setError('Unable to load weather for your location.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSearch = (event) => {
-    event.preventDefault();
-    fetchWeather(searchVal);
-  };
-
-  const handleHistoryClick = (cityName) => {
-    setSearchVal(cityName);
-    fetchWeather(cityName);
-  };
-
-  const handleLocation = () => {
-    if (!navigator.geolocation) {
-      setError('Geolocation is not supported by this browser.');
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        fetchWeatherByCoords(position.coords.latitude, position.coords.longitude);
-      },
-      () => setError('Permission denied. Please allow location access.'),
-      { enableHighAccuracy: true, timeout: 10000 }
-    );
-  };
-
-  const handleUnitChange = (selectedUnits) => {
-    if (units === selectedUnits) return;
-    setUnits(selectedUnits);
-    if (city?.name) {
-      fetchWeather(city.name, selectedUnits);
     }
   };
 
   useEffect(() => {
-    const initialCity = history?.[0] || DEFAULT_CITY;
-    setSearchVal(initialCity);
-    fetchWeather(initialCity, units);
+    fetchWeather();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const bg = (mood) => {
+    if (!mood) return 'bg-[linear-gradient(120deg,#0ea5e9,#2563eb)]';
+    const s = mood.toLowerCase();
+    if (s.includes('rain') || s.includes('drizzle')) return "bg-[url('https://images.unsplash.com/photo-1527766833261-b09c3163a791?auto=format&fit=crop&w=1600&q=60')]";
+    if (s.includes('cloud')) return "bg-[url('https://images.unsplash.com/photo-1501630834273-4b5604d2ee31?auto=format&fit=crop&w=1600&q=60')]";
+    return "bg-[url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1600&q=60')]";
+  };
+
   return (
-    <div className="app-container">
-      <Leftsidebar city={city} units={units} />
-      <Rightsidebar
-        city={city}
-        forecast={forecast}
-        searchVal={searchVal}
-        setSearchVal={setSearchVal}
-        units={units}
-        onUnitChange={handleUnitChange}
-        onSearch={handleSearch}
-        onLocation={handleLocation}
-        onHistoryClick={handleHistoryClick}
-        history={history}
-        isLoading={isLoading}
-        error={error}
-      />
+    <div className={`app-root`}> 
+      <div className={`weather-shell ${bg(city?.weathermood)} bg-photo`}> 
+        <div className="overlay-top" />
+        <div className="content-grid">
+          <main className="left-col">
+            <Header location={city?.name || 'Inverness'} updated={city ? 'Updated a few minutes ago' : 'Updated a moment ago'} />
+            <div className="mt-6">
+              <Hero city={city || { temp: 13, weathermood: 'Sunny', speed: 3 }} />
+            </div>
+            <div className="mt-6">
+              <ForecastRow days={forecast?.daily?.slice(0, 7).map((d, i) => ({ day: i === 0 ? 'Today' : new Date(d.dt * 1000).toLocaleDateString(undefined, { weekday: 'short' }), high: Math.round(d.temp.max), low: Math.round(d.temp.min), active: i === 0 }))} />
+            </div>
+            <div className="mt-4">
+              <HourlyRow hours={forecast?.hourly?.slice(0, 12).map((h) => ({ t: new Date(h.dt * 1000).toLocaleTimeString([], { hour: '2-digit' }), temp: Math.round(h.temp) }))} />
+            </div>
+          </main>
+          <aside className="right-col">
+            <div className="glass rounded-2xl p-6">
+              <h3 className="text-lg font-semibold">Details</h3>
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                <div className="glass p-3 text-center rounded-lg">Feels like<br/><strong>--°</strong></div>
+                <div className="glass p-3 text-center rounded-lg">Humidity<br/><strong>--%</strong></div>
+                <div className="glass p-3 text-center rounded-lg">Wind<br/><strong>{city?.speed ?? '--'} m/s</strong></div>
+                <div className="glass p-3 text-center rounded-lg">Visibility<br/><strong>--</strong></div>
+              </div>
+            </div>
+            <div className="mt-6 glass rounded-2xl p-4">
+              <h4 className="text-sm text-white/80">Hourly overview</h4>
+              <div className="mt-3">
+                <HourlyRow />
+              </div>
+            </div>
+            <div className="mt-6 text-center">
+              <PaginationDots pages={3} active={0} />
+            </div>
+          </aside>
+        </div>
+      </div>
     </div>
   );
 }
-
-export default App;
