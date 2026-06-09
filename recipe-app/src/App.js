@@ -3,9 +3,10 @@ import Searchbar from "./components/Searchbar";
 import RecipeContainer from "./components/RecipeContainer";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Typography, Container } from "@mui/material";
+import { Typography, Container, Box, CircularProgress, Stack } from "@mui/material";
 import Menu from "./components/Menu";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 function App() {
   const [recipes, setRecipes] = useState(null);
@@ -21,7 +22,6 @@ function App() {
     const uri = `https://api.edamam.com/api/recipes/v2?type=public&q=${search}&app_id=beff2f47&app_key=${process.env.REACT_APP_API_KEY}&health=${healthLabel}`;
     try {
       await axios.get(uri).then((res) => {
-        // console.log(res.data)
         setRecipes(res.data.hits);
         setRecipeList(res.data.hits);
         setMealTypes([
@@ -32,6 +32,7 @@ function App() {
       });
     } catch (error) {
       console.log(error);
+      setIsLoaded(true);
     }
   };
 
@@ -40,11 +41,8 @@ function App() {
       setRecipeList(recipes);
     } else {
       const filteredRecipe = recipes.filter((elem) => {
-        // console.log(elem)
-        // console.log(elem.recipe.mealType[0]);
         return elem.recipe.mealType[0] === mealType;
       });
-      // console.log(filteredRecipe);
       setRecipeList(filteredRecipe);
     }
   };
@@ -52,22 +50,58 @@ function App() {
   const theme = createTheme({
     palette: {
       mode: darkMode ? "dark" : "light",
-      // background: {
-      //   default: "#3805ad",
-      //   paper: "#3805ad"
-      // },
-      // primary: {
-      //   main: "#00FF00"
-      // },
-      // secondary: {
-      //   main: "#00FF00"
-      // },
-      // text: {
-      //   primary: "#000000",
-      //   secondary: "#FFFFFF"
-      // },
-    }
-  })
+      primary: {
+        main: "#667eea",
+        light: "#8b9ef0",
+        dark: "#5568d3",
+      },
+      secondary: {
+        main: "#764ba2",
+        light: "#8d5db8",
+        dark: "#5a3680",
+      },
+      background: {
+        default: darkMode ? "#1a1a2e" : "#f5f7fa",
+        paper: darkMode ? "#16213e" : "#ffffff",
+      },
+      text: {
+        primary: darkMode ? "#e0e0e0" : "#1a1a2e",
+        secondary: darkMode ? "#b0b0b0" : "#666666",
+      },
+    },
+    typography: {
+      fontFamily: "'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', sans-serif",
+      h5: {
+        fontWeight: '700',
+        letterSpacing: '0.5px',
+      },
+      h6: {
+        fontWeight: '600',
+      },
+    },
+    shape: {
+      borderRadius: 12,
+    },
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            textTransform: 'none',
+            fontWeight: '600',
+            borderRadius: '8px',
+          },
+        },
+      },
+      MuiCard: {
+        styleOverrides: {
+          root: {
+            borderRadius: '16px',
+            boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+          },
+        },
+      },
+    },
+  });
 
   useEffect(() => {
     getRecipes("pasta", "vegan");
@@ -79,34 +113,63 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Header toggleTheme={toggleTheme} />
-      <Searchbar getRecipes={getRecipes} />
+      <CssBaseline />
+      <Box sx={{
+        minHeight: '100vh',
+        background: darkMode 
+          ? 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)'
+          : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+      }}>
+        <Header toggleTheme={toggleTheme} />
+        <Searchbar getRecipes={getRecipes} />
 
-      {!mealTypes && undefined}
+        {!mealTypes && undefined}
 
-      {mealTypes && (
-        <Menu
-          mealTypes={mealTypes}
-          filterRecipes={filterRecipes}
-          isLoaded={isLoaded}
-        />
-      )}
+        {mealTypes && (
+          <Menu
+            mealTypes={mealTypes}
+            filterRecipes={filterRecipes}
+            isLoaded={isLoaded}
+          />
+        )}
 
-      {!recipes && (
-        <Container maxWidth="sm">
-          <Typography variant="h4" mt={8} align="center">
-            Fetching some pasta recipes for you! 😋
-          </Typography>
-        </Container>
-      )}
+        {!recipes && isLoaded === false && (
+          <Container maxWidth="sm">
+            <Stack 
+              direction="column" 
+              alignItems="center" 
+              justifyContent="center"
+              sx={{ mt: 8, minHeight: '300px' }}
+              spacing={2}
+            >
+              <CircularProgress 
+                size={60}
+                sx={{
+                  color: '#667eea',
+                }}
+              />
+              <Typography 
+                variant="h5" 
+                align="center"
+                sx={{
+                  color: darkMode ? '#e0e0e0' : '#1a1a2e',
+                  fontWeight: '600',
+                }}
+              >
+                🍽️ Fetching delicious pasta recipes...
+              </Typography>
+            </Stack>
+          </Container>
+        )}
 
-      {recipes && (
-        <RecipeContainer
-          recipeList={recipeList.length === 0 ? recipes : recipeList}
-          isLoaded={isLoaded}
-        />
-      )}
+        {recipes && isLoaded && (
+          <RecipeContainer
+            recipeList={recipeList.length === 0 ? recipes : recipeList}
+            isLoaded={isLoaded}
+          />
+        )}
 
+      </Box>
     </ThemeProvider>
   );
 }
