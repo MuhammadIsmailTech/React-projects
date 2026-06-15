@@ -2,6 +2,10 @@ import React from 'react';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import JobsSection from './components/JobsSection';
+import WhyChooseSection from './components/WhyChooseSection';
+import StatsSection from './components/StatsSection';
+import TestimonialsSection from './components/TestimonialsSection';
+import FooterSection from './components/FooterSection';
 
 /**
  * Main App Component
@@ -18,14 +22,17 @@ function App() {
       {/* Section 2: Latest Government Jobs */}
       <JobsSection />
 
-      {/* Main Content - Will be added in future sections */}
-      <main className="bg-slate-950 py-12">
-        {/* Placeholder for future sections */}
-        <div className="p-8 text-center">
-          <h1 className="text-4xl font-bold text-white mb-4">More Sections Coming Soon</h1>
-          <p className="text-gray-400 text-lg">Section 3, 4, and 5 will be added step by step...</p>
-        </div>
-      </main>
+      {/* Section 3: Why Choose National Jobs Portal */}
+      <WhyChooseSection />
+
+      {/* Section 4: Statistics Counters */}
+      <StatsSection />
+
+      {/* Section 5: Testimonials / Success Stories */}
+      <TestimonialsSection />
+
+      {/* Section 6: Footer + Contact Area */}
+      <FooterSection />
     </div>
   );
 }
