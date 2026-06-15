@@ -1,0 +1,18 @@
+/**
+ * Global Styles with Tailwind CSS
+ * Includes Tailwind directives and custom global styles
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth scrolling for the entire document */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom global styles can be added here */
+body {
+  @apply antialiased;
+}
