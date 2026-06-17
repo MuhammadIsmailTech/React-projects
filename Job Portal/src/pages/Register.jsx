@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function SignUp() {
+export default function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -10,20 +11,24 @@ export default function SignUp() {
   function handleSubmit(e) {
     e.preventDefault();
     const users = JSON.parse(localStorage.getItem("users") || "[]");
-    const user = users.find((user) => user.email === email && user.password === password);
-    if (!user) {
-      setMessage("Invalid credentials.");
+    if (users.find((user) => user.email === email)) {
+      setMessage("Email already registered.");
       return;
     }
-    localStorage.setItem("authUser", JSON.stringify(user));
-    setMessage("Signed in successfully. Redirecting to Search...");
-    setTimeout(() => navigate("/search"), 700);
+    users.push({ name, email, password });
+    localStorage.setItem("users", JSON.stringify(users));
+    setMessage("Registered successfully. Redirecting to Sign In...");
+    setTimeout(() => navigate("/signup"), 700);
   }
 
   return (
     <div>
-      <h2>Sign In</h2>
+      <h2>Register</h2>
       <form onSubmit={handleSubmit} className="form">
+        <label>
+          Name
+          <input value={name} onChange={(e) => setName(e.target.value)} required />
+        </label>
         <label>
           Email
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
@@ -32,7 +37,7 @@ export default function SignUp() {
           Password
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </label>
-        <button type="submit">Sign In</button>
+        <button type="submit">Register</button>
       </form>
       {message && <p className="msg">{message}</p>}
     </div>
