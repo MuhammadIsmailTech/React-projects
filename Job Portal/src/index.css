@@ -15,4 +15,68 @@ html {
 /* Custom global styles can be added here */
 body {
   @apply antialiased;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  padding: 16px;
+}
+
+.nav {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #0066cc;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 360px;
+}
+
+.form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+.form input {
+  padding: 8px;
+  font-size: 14px;
+}
+
+button {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.msg {
+  color: #006600;
+}
+
+.search {
+  padding: 8px;
+  width: 100%;
+  max-width: 480px;
+  margin-bottom: 12px;
+}
+
+.job {
+  border: 1px solid #eee;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 4px;
 }
