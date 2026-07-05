@@ -31,16 +31,6 @@ const projects = [
   },
   {
     id: 4,
-    name: 'Weather App',
-    description: 'Real-time weather lookup with geolocation and forecast cards.',
-    tech: ['React', 'OpenWeather API', 'Responsive Layout'],
-    category: 'API',
-    status: 'Live',
-    liveLink: 'https://react-projects-puce-three.vercel.app/',
-    githubLink: 'https://github.com/MuhammadIsmailTech/React-projects/tree/main/weather-app'
-  },
-  {
-    id: 5,
     name: 'The TieBreaker',
     description: 'the ultimate tiebreaker app for resolving disputes and making decisions with ease and fairness between two options.',
     tech: ['React', 'API Integration', 'Responsive Design'],
@@ -50,7 +40,7 @@ const projects = [
     githubLink: 'https://github.com/MuhammadIsmailTech/React-projects/tree/main/the-tiebreaker'
   },
   {
-    id: 6,
+    id: 5,
     name: 'Job Portal',
     description: 'A full stack job portal with search and application features.',
     tech: ['React', 'Responsive Design', ''],
@@ -59,6 +49,7 @@ const projects = [
     liveLink: 'https://react-projects-job-portal.vercel.app/',
     githubLink: 'https://github.com/MuhammadIsmailTech/React-projects/tree/main/Job Portal'
   }
+  
 ];
 
 export default projects;
