@@ -41,13 +41,13 @@ const projects = [
   },
   {
     id: 5,
-    name: 'Dashboard Builder',
-    description: 'An admin-style analytics panel featuring charts and data summaries.',
+    name: 'The TieBreaker',
+    description: 'the ultimate tiebreaker app for resolving disputes and making decisions with ease and fairness between two options.',
     tech: ['React', 'UI Components', 'Dark Mode'],
     category: 'UI',
     status: 'Build',
-    liveLink: '#',
-    githubLink: '#'
+    liveLink: 'https://react-projects-tiebreaker.vercel.app/',
+    githubLink: 'https://github.com/MuhammadIsmailTech/React-projects/tree/main/the-tiebreaker'
   },
   {
     id: 6,
