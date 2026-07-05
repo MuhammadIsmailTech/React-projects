@@ -31,7 +31,7 @@ const projects = [
   },
   {
     id: 4,
-    name: 'Weather Sentinel',
+    name: 'Weather App',
     description: 'Real-time weather lookup with geolocation and forecast cards.',
     tech: ['React', 'OpenWeather API', 'Responsive Layout'],
     category: 'API',
@@ -43,8 +43,8 @@ const projects = [
     id: 5,
     name: 'The TieBreaker',
     description: 'the ultimate tiebreaker app for resolving disputes and making decisions with ease and fairness between two options.',
-    tech: ['React', 'UI Components', 'Dark Mode'],
-    category: 'UI',
+    tech: ['React', 'API Integration', 'Responsive Design'],
+    category: 'API',
     status: 'Build',
     liveLink: 'https://react-projects-tiebreaker.vercel.app/',
     githubLink: 'https://github.com/MuhammadIsmailTech/React-projects/tree/main/the-tiebreaker'
