@@ -51,13 +51,13 @@ const projects = [
   },
   {
     id: 6,
-    name: 'Book Review Hub',
-    description: 'A full stack review platform with book search and ratings.',
-    tech: ['React', 'Node.js', 'MongoDB'],
-    category: 'Full Stack',
+    name: 'Job Portal',
+    description: 'A full stack job portal with search and application features.',
+    tech: ['React', 'Responsive Design', ''],
+    category: 'UI',
     status: 'Preview',
-    liveLink: '#',
-    githubLink: '#'
+    liveLink: 'https://react-projects-job-portal.vercel.app/',
+    githubLink: 'https://github.com/MuhammadIsmailTech/React-projects/tree/main/Job Portal'
   }
 ];
 
