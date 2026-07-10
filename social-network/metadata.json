@@ -1,0 +1,6 @@
+{
+  "name": "Social Network",
+  "description": "A feature-rich social network platform like Facebook featuring posts, friend requests, privacy controls, groups, chat, notifications, and dark mode.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

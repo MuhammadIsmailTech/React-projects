@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Overwriting default color palette with Geometric Balance Slate theme */
+  --color-zinc-50: #18191a;
+  --color-zinc-100: #3a3b3c;
+  --color-zinc-200: #3e4042;
+  --color-zinc-300: #4e4f50;
+  --color-zinc-400: #b0b3b8;
+  --color-zinc-500: #b0b3b8;
+  --color-zinc-600: #e4e6eb;
+  --color-zinc-700: #e4e6eb;
+  --color-zinc-800: #3a3b3c;
+  --color-zinc-900: #242526;
+  --color-zinc-950: #18191a;
+
+  /* Overwriting Indigo/primary colors to Geometric Balance Facebook Blue */
+  --color-indigo-50: #1a2333;
+  --color-indigo-100: #21304d;
+  --color-indigo-200: #2c426e;
+  --color-indigo-300: #39599c;
+  --color-indigo-400: #2d88ff;
+  --color-indigo-505: #2d88ff;
+  --color-indigo-500: #2d88ff;
+  --color-indigo-600: #2d88ff;
+  --color-indigo-700: #1a73e8;
+  --color-indigo-800: #0e59c1;
+  --color-indigo-900: #0a4294;
+  --color-indigo-950: #081d3d;
+
+  /* Custom overrides for white backgrounds */
+  --color-white: #242526;
+}
+
+/* Base custom styles to enforce Geometric Balance styling on standard items */
+html, body {
+  background-color: #18191a !important;
+  color: #e4e6eb !important;
+  font-family: var(--font-sans);
+  height: 100%;
+  margin: 0;
+  scrollbar-color: #3e4042 #18191a;
+  scrollbar-width: thin;
+}
+
+/* Custom modern scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #18191a;
+}
+::-webkit-scrollbar-thumb {
+  background: #3e4042;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4e4f50;
+}
+
+/* Ensure nice focus states across the app */
+input, select, textarea {
+  background-color: #3a3b3c !important;
+  color: #e4e6eb !important;
+  border: 1px solid #3e4042 !important;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: #2d88ff !important;
+  outline: none !important;
+}
+
+/* Let's make sure the card styles feel solid and perfectly arranged */
+.bg-white {
+  background-color: #242526 !important;
+}
+
+.text-zinc-900 {
+  color: #e4e6eb !important;
+}
+.text-zinc-800 {
+  color: #e4e6eb !important;
+}
+.text-zinc-700 {
+  color: #b0b3b8 !important;
+}
+.text-zinc-500 {
+  color: #b0b3b8 !important;
+}
+.text-zinc-400 {
+  color: #b0b3b8 !important;
+}
+
+/* Clean transition timings */
+* {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
