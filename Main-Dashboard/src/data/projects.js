@@ -36,14 +36,14 @@ const projects = [
     tech: ['React', 'API Integration', 'Responsive Design'],
     category: 'API',
     status: 'Build',
-    liveLink: 'https://react-projects-tiebreaker.vercel.app/',
+    liveLink: 'https://the-tiebreaker-delta.vercel.app/',
     githubLink: 'https://github.com/MuhammadIsmailTech/React-projects/tree/main/the-tiebreaker'
   },
   {
     id: 5,
     name: 'Job Portal',
     description: 'A full stack job portal with search and application features.',
-    tech: ['React', 'Responsive Design', ''],
+    tech: ['React', 'Responsive Design', 'UX Design'],
     category: 'UI',
     status: 'Preview',
     liveLink: 'https://react-projects-job-portal.vercel.app/',
